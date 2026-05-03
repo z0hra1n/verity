@@ -28,8 +28,7 @@ app.post('/verify-art', upload.single('artImage'), async (req, res) => {
     if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
     console.log("--- New Upload Attempt ---");
-    console.log("Artist:", req.body.artistName); // If this says 'undefined', fix your frontend order!
-
+    console.log("Artist:", req.body.artistName); 
     const data = new FormData();
     data.append('media', fs.createReadStream(req.file.path));
     data.append('models', 'genai');
@@ -44,11 +43,11 @@ app.post('/verify-art', upload.single('artImage'), async (req, res) => {
             headers: data.getHeaders()
         });
 
-        // Safe extraction of the score
+        
         const aiScore = (apiRes.data && apiRes.data.type) ? apiRes.data.type.ai_generated : 0;
         console.log("AI Score from Sightengine:", aiScore);
 
-        // Check the score (0.99 for testing to be super safe)
+        
         if (aiScore >= 0.70) {
             console.log("REJECTED BY AI POLICY");
             if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
@@ -96,7 +95,7 @@ app.post('/verify-art', upload.single('artImage'), async (req, res) => {
     } catch (err) {
         console.error("SERVER CRASH DETAILS:", err.message);
         if (req.file && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
-        // Send actual error back so frontend doesn't just "guess" rejection
+        
         return res.status(500).json({ status: 'error', message: err.message });
     }
 });
