@@ -43,7 +43,7 @@
          font-family: 'Instrument Serif', serif;
          font-size: 18vh;
          color:rgb(0, 37, 12);
-         transform: translateY(10vh);
+         transform: translateY(15vh);
 
         }
 
@@ -89,9 +89,32 @@
             font-weight: 600;
             cursor: pointer;
             transition: 0.3s ease; 
-            transform: translateY(-25vh) translateX(-35vw);
+            transform: translateY(-10vh) translateX(-35vw);
             position: relative;
             }
+
+            .verity {
+
+            background-color:#97a886;
+            color:#000000;
+            padding: 3vh 7vh;
+            border: 3px solid #373d32;
+            border-radius: 18px;
+            margin-top: 5vh;
+            font-family: 'Instrument Serif', serif;
+            font-size: 3vh;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s ease; 
+            transform: translateY(-18.5vh) translateX(0vw);
+            position: relative;
+            }
+      
+                 .verity:hover {
+            background-color: #cbcfb4;
+            transform: translateY(-18.5vh) translateX(0vw) scale(1.05);
+            
+           }
 
             .qr {
 
@@ -120,7 +143,7 @@
        
             .serial:hover {
             background-color: #cbcfb4;
-            transform: translateY(-25vh) translateX(-35vw) scale(1.05);
+            transform: translateY(-10vh) translateX(-35vw) scale(1.05);
             
            }
 
@@ -134,15 +157,16 @@
            }
 
 @media (max-width: 768px) {
-    body {
-        overflow: hidden;
-    }
 
+    html, body {
+        overflow: auto;
+    }
+    
     .inner-square {
         height: 97.5%;
         justify-content: flex-start;
-        padding: 3vh 4vw;
-        gap: 2vh;
+        padding: 1vh 4vw;
+        gap: 0.5vh;
     }
 
     .title {
@@ -150,48 +174,43 @@
         transform: none;
         text-align: center;
         order: 1;
+        margin: 0;
     }
 
     .happy {
         order: 2;
         display: flex;
         justify-content: center;
+        margin: 0;
     }
 
     .happy img {
         height: 40vh;
-        width: 80vw;
+        width: 70vw;
         transform: none;
         object-fit: contain;
     }
 
-    .serial {
+    .serial, .qr, .verity {
         position: static;
         transform: none;
-        margin-top: 0;
-        width: 85vw;
+        margin: 0;
+        width: 80vw;
         text-align: center;
-        order: 3;
+        padding: 2vh 2vh;
+        font-size: 4vh;
+        border-radius: 12px;
     }
 
-    .serial:hover {
-        transform: scale(1.05);
-    }
+    .serial { order: 3; }
+    .qr { order: 4; }
+    .verity { order: 5; }
 
-    .qr {
-        position: static;
-        transform: none;
-        margin-top: 0;
-        width: 85vw;
-        text-align: center;
-        order: 4;
-    }
-
-    .qr:hover {
+    .serial:hover, .qr:hover, .verity:hover {
         transform: scale(1.05);
     }
 }
-    </style>
+   </style>
         <title>Verity</title>
     </head>
     <body>
@@ -204,6 +223,7 @@
                 <img src="love.png">
             </div>
              <button class="serial">COPY SERIAL NUMBER</button>
+             <button class="verity">VERIFY YOUR ART</button>
              <button class="qr">DOWNLOAD QR CODE</button>   
          </div>
         </div>
@@ -216,7 +236,7 @@
          const qr = new QRCodeStyling({
             width:300,
             height: 300,
-            data: `http://localhost:3000/serial.html?sn=${serial}`,
+            data: `https://verity-cbqx.onrender.com/serial.html?sn=${serial}`,
             image: "logo.png",
             dotsOptions: {
                 color: "#373d32",
@@ -242,6 +262,7 @@
      
         const btn = document.querySelector('.serial')
         const qrBtn = document.querySelector('.qr')
+        const verity = document.querySelector('.verity')
 
         document.querySelector('.serial').addEventListener('click', async () => {
             try {
@@ -257,6 +278,10 @@
               
             
             });
+
+         verity.addEventListener('click', async () => {
+            window.location.href = 'verity.html';
+         })
 
          qrBtn.addEventListener('click', async () => {
             qr.download({
