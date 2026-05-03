@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <style>
+
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+ 
+            .submit {
+
+            background-color:#97a886;
+            color:#000000;
+            padding: 3vh 7vh;
+            border: 3px solid #373d32;
+            border-radius: 18px;
+            margin-top: 5vh;
+            font-family: 'Instrument Serif', serif;
+            font-size: 3vh;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s ease; 
+            transform: translateY(-1vh);
+            position: relative;
+            }
+
+
+        body{
+         height: 100vh;
+         display: flex;
+         background-color: #99735a;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         margin: 0;
+        }
+
+        .inner-square {
+            width: 97.5%;
+            height: 95%;
+            background-color: #bb9f89;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+  
+        .title{
+         font-family: 'Instrument Serif', serif;
+         font-size: 12vh;
+         color:rgb(0, 37, 12);
+         transform: translateY(-37vh);
+         position: absolute;
+
+        }
+
+        .sad {
+       display: inline-block;
+       line-height: 0;          
+       background-color: #99735a;
+       border: 5px solid #66472b;
+       border-radius: 25px;
+       overflow: hidden;         
+       width: 40vw;
+       height: 55vh;
+    
+       transform: translateY(7vh) translateX(25vh);
+       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+        
+       
+
+        .sad img {
+        width: 100%;          
+         height: 100%;         
+        width: auto;              
+        height: auto;             
+        display: block;           
+        object-fit: cover;
+        display: block;
+   
+        border: none;
+        transform: none;
+         } 
+
+        .square {
+            width: 95vw;
+            height: 95vh;
+            background-color:#66472b;
+            border-radius: 20px;
+            display: flex;           
+            flex-direction: column;  
+            justify-content: center; 
+            align-items: center;    
+        }
+
+        .name{
+         font-family: 'Instrument Serif', serif;
+         font-size: 5vh;
+         color:#66472b;
+         transform: translateY(25vh) translateX(-70vh);
+         position: absolute;
+
+        }
+
+        .art{
+         font-family: 'Instrument Serif', serif;
+         font-size: 5vh;
+         color:#66472b;
+         transform: translateY(10vh) translateX(-70vh);
+         position: absolute;
+
+        }
+        
+        .serial{
+         font-family: 'Instrument Serif', serif;
+         font-size: 5vh;
+         color:#66472b;
+         transform: translateY(-5vh) translateX(-65vh);
+         position: absolute;
+
+        }
+
+        html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    body {
+        overflow: hidden;
+    }
+
+    .inner-square {
+        height: 97.5%;
+        justify-content: flex-start;
+        padding: 3vh 4vw;
+        gap: 1.5vh;
+    }
+
+    .title {
+        font-size: 6vh;
+        position: static;
+        transform: none;
+        text-align: center;
+        order: 1;
+    }
+
+    .name, .art, .serial {
+        font-size: 2.5vh;
+        position: static;
+        transform: none;
+        text-align: left;
+        width: 90%;
+        margin: 0;
+        order: 3;
+    }
+
+    .sad {
+        transform: none;
+        width: 85vw;
+        height: 35vh;
+        order: 2;
+        align-self: center;
+    }
+}
+
+
+    </style>
+        <title>Verity</title>
+    </head>
+    <body>
+        <div class="square">
+         <div class="inner-square"> 
+            <h1 class="title">Your Art has been serialized!</h1>
+            <p class="name">Artist's Name:</p>
+            <p class="art">Art's Name:</p>
+            <p class="serial">Serial number:</p>
+            <div class="sad">
+                <img src="">
+            </div>
+            </div>      
+         </div>
+<script>
+
+const supabaseUrl = 'https://dyudxshfokqzlasmejxw.supabase.co';
+const supabaseKey = 'sb_publishable_rbTveADeGa999mYwQ0qKjg_MrNnMGkq';
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+  
+window.addEventListener('load', async () => {
+    const params = new URLSearchParams(window.location.search);
+    const sn = params.get('sn');
+
+    if (!sn) {
+        document.querySelector('.title').innerText = "Certificate Not Found";
+        return;
+    }
+
+    try {
+
+    const { data, error} = await _supabase
+    .from('certifications')
+    .select('*')
+    .eq('serial', sn)
+    .single();
+
+    if (error || !data) {
+        console.error("Database error:", error);
+        document.querySelector('.serial').innerText = "Serial: INVALID"
+        return;
+    }
+
+    document.querySelector('.name').innerText = `Artist's Name: ${data.artist}`;
+    document.querySelector('.art').innerText = `Art's Name: ${data.art}`;
+    document.querySelector('.serial').innerText = `Serial number: ${data.serial}`;
+
+    const imgElement = document.querySelector('.sad img');
+    if (data.image) {
+        imgElement.src = data.image;
+        imgElement.style.width = "100%";
+        imgElement.style.height = "auto";
+    }
+   } catch (err) {
+    console.error("System Error:", err);
+   }
+});     
+        </script>
+    </body>
+</html>

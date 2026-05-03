@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://google.com/recaptcha/api.js" async defer></script>
+        <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0/lib/qr-code-styling.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        
+
+
+
+        body{
+         height: 100vh;
+         display: flex;
+         background-color: #99735a;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         margin: 0;
+         overflow: hidden;
+        }
+
+        .inner-square {
+            width: 97.5%;
+            height: 97.5%;
+            background-color: #bb9f89;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+  
+        .title{
+         font-family: 'Instrument Serif', serif;
+         font-size: 18vh;
+         color:rgb(0, 37, 12);
+         transform: translateY(10vh);
+
+        }
+
+
+
+        .happy img {
+            height: 60vh;
+            width: 30vw;
+             transform: translateY(0vh) translateX(0);
+        }
+
+        .square {
+            width: 95vw;
+            height: 95vh;
+            background-color:#66472b;
+            border-radius: 20px;
+            display: flex;           
+            flex-direction: column;  
+            justify-content: center; 
+            align-items: center;    
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2vh;
+            position: absolute;
+            transform: translateY(-5vh) translateX(-40vw);
+        }
+ 
+
+
+            .serial {
+
+            background-color:#97a886;
+            color:#000000;
+            padding: 3vh 7vh;
+            border: 3px solid #373d32;
+            border-radius: 18px;
+            margin-top: 5vh;
+            font-family: 'Instrument Serif', serif;
+            font-size: 3vh;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s ease; 
+            transform: translateY(-25vh) translateX(-35vw);
+            position: relative;
+            }
+
+            .qr {
+
+            background-color:#97a886;
+            color:#000000;
+            padding: 3vh 7vh;
+            border: 3px solid #373d32;
+            border-radius: 18px;
+            margin-top: 5vh;
+            font-family: 'Instrument Serif', serif;
+            font-size: 3vh;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s ease; 
+            transform: translateY(-41vh) translateX(35vw);
+            position: relative;
+            }
+
+            .qr:hover {
+            background-color: #cbcfb4;
+            transform: translateY(-41vh) translateX(35vw) scale(1.05);
+            
+           }
+           
+           
+       
+            .serial:hover {
+            background-color: #cbcfb4;
+            transform: translateY(-25vh) translateX(-35vw) scale(1.05);
+            
+           }
+
+           html {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+
+           }
+
+@media (max-width: 768px) {
+    body {
+        overflow: hidden;
+    }
+
+    .inner-square {
+        height: 97.5%;
+        justify-content: flex-start;
+        padding: 3vh 4vw;
+        gap: 2vh;
+    }
+
+    .title {
+        font-size: 7vh;
+        transform: none;
+        text-align: center;
+        order: 1;
+    }
+
+    .happy {
+        order: 2;
+        display: flex;
+        justify-content: center;
+    }
+
+    .happy img {
+        height: 40vh;
+        width: 80vw;
+        transform: none;
+        object-fit: contain;
+    }
+
+    .serial {
+        position: static;
+        transform: none;
+        margin-top: 0;
+        width: 85vw;
+        text-align: center;
+        order: 3;
+    }
+
+    .serial:hover {
+        transform: scale(1.05);
+    }
+
+    .qr {
+        position: static;
+        transform: none;
+        margin-top: 0;
+        width: 85vw;
+        text-align: center;
+        order: 4;
+    }
+
+    .qr:hover {
+        transform: scale(1.05);
+    }
+}
+    </style>
+        <title>Verity</title>
+    </head>
+    <body>
+        <div class="square">
+         <div class="inner-square">
+            <div class="input-container">
+            </div>         
+            <h1 class="title">GET CERTIFIED!</h1>
+            <div class="happy">
+                <img src="love.png">
+            </div>
+             <button class="serial">COPY SERIAL NUMBER</button>
+             <button class="qr">DOWNLOAD QR CODE</button>   
+         </div>
+        </div>
+    <script>
+
+
+        const params = new URLSearchParams(window.location.search);
+        const serial = params.get('sn');
+        
+         const qr = new QRCodeStyling({
+            width:300,
+            height: 300,
+            data: `http://localhost:3000/serial.html?sn=${serial}`,
+            image: "logo.png",
+            dotsOptions: {
+                color: "#373d32",
+                type: "rounded"
+            },
+            backgroundOptions: {
+                color: "#bb9f89"
+            },
+            imageOptions: {
+                crossOrigin: "anonymous",
+                margin: 10
+            }
+
+
+        });
+
+       
+       
+          
+        if(!serial){
+            alert("No serial found!");
+        }
+     
+        const btn = document.querySelector('.serial')
+        const qrBtn = document.querySelector('.qr')
+
+        document.querySelector('.serial').addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(serial);
+                    btn.innerText = "COPIED!";
+                  setTimeout(() => {
+                  btn.innerText = "COPY SERIAL NUMBER";
+                  }, 1500);
+            } catch (err) {
+                console.error("Copy failed:", err);
+                alert("Failed to copy serial.");
+            }
+              
+            
+            });
+
+         qrBtn.addEventListener('click', async () => {
+            qr.download({
+                name: "verity-qr",
+                extension: "png"
+            });
+         });
+    </script>
+
+    </body>
+</html>
+
