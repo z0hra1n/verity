@@ -7,6 +7,7 @@ after it detects it as human made, it saves the image along with the name and ar
 it also generates a serial code and qr code.
 both can be used for verifying the project on the verity website.
 the website also has a "verifying page" from which humans can verify their art after entering a serial code.
+it also has breakpoints for mobile phones.
 funfact: verity means "truth" in latin.
 
 ****<img width="1881" height="923" alt="image" src="https://github.com/user-attachments/assets/eabda34b-4f0c-4e1f-80fc-fdf017786ca1" />
